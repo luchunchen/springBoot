@@ -1,13 +1,14 @@
 package com.example.springbootmall.model;
 
-import javax.xml.crypto.Data;
+import com.example.springbootmall.constant.ProductCategroy;
+
 import java.util.Date;
 
 public class Product {
 
     private Integer productId;
     private String productName;
-    private String category;
+    private ProductCategroy category;
     private String imageUrl;
     private Integer price;
     private Integer stock;
@@ -31,11 +32,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getCategory() {
+    public ProductCategroy getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProductCategroy category) {
         this.category = category;
     }
 
