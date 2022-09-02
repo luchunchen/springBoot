@@ -1,6 +1,6 @@
 package com.example.springbootmall.constant;
 
-public enum ProductCategroy {
+public enum ProductCategory {
     FOOD,
     E_BOOK,
     CAR,
