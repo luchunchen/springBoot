@@ -1,6 +1,8 @@
 package com.example.springbootmall.dao.impl;
 
+import com.example.springbootmall.constant.ProductCategory;
 import com.example.springbootmall.dao.ProductDao;
+import com.example.springbootmall.dto.ProductQueryParams;
 import com.example.springbootmall.dto.ProductRequest;
 import com.example.springbootmall.model.Product;
 import com.example.springbootmall.rowmapper.ProductRawMapper;
@@ -23,16 +25,33 @@ public class ProduceDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
 
         String sql = "SELECT product_id, product_name, category, image_url" +
                 ", price, stock, description, created_date, last_modified_date" +
-                " FROM product";
+                " FROM product" +
+                " WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
-        List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRawMapper());
+        if(productQueryParams.getCategory() != null) {
+            sql = sql + " AND category = :category";
+            map.put("category", productQueryParams.getCategory().name());
+        }
 
+        if(productQueryParams.getSearch() != null) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + productQueryParams.getSearch() + "%");
+        }
+
+        sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
+
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit", productQueryParams.getLimit());
+        map.put("offset", productQueryParams.getOffset());
+
+        List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRawMapper());
+        System.out.println(map);
         return productList;
     }
 
