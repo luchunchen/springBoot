@@ -4,6 +4,7 @@ import com.example.springbootmall.dao.OrderDao;
 import com.example.springbootmall.dao.ProductDao;
 import com.example.springbootmall.dto.BuyItem;
 import com.example.springbootmall.dto.CreateOrderRequest;
+import com.example.springbootmall.model.Order;
 import com.example.springbootmall.model.OrderItem;
 import com.example.springbootmall.model.Product;
 import com.example.springbootmall.serveice.OrderService;
@@ -21,6 +22,18 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
+
+        order.setOrderItemList(orderItemList);
+
+        return order;
+
+    }
 
     //使用交易註解，只要途中有發生問題，就會復原資料庫的資料
     @Transactional
